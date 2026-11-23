@@ -22,25 +22,9 @@ jobs:
         working-directory: source
         run: |
           if [ -f app/build.gradle.kts ]; then
-            cat >> app/build.gradle.kts <<'EOF'
-
-android {
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-}
-EOF
+            printf '\nandroid {\n    compileOptions {\n        sourceCompatibility = JavaVersion.VERSION_17\n        targetCompatibility = JavaVersion.VERSION_17\n    }\n}\n' >> app/build.gradle.kts
           elif [ -f app/build.gradle ]; then
-            cat >> app/build.gradle <<'EOF'
-
-android {
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-}
-EOF
+            printf '\nandroid {\n    compileOptions {\n        sourceCompatibility JavaVersion.VERSION_17\n        targetCompatibility JavaVersion.VERSION_17\n    }\n}\n' >> app/build.gradle
           else
             echo 'Could not find app/build.gradle(.kts)' >&2
             exit 1
