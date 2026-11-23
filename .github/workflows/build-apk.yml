@@ -18,6 +18,33 @@ jobs:
           base64 -d project.tar.gz.b64 > project.tar.gz
           mkdir source
           tar -xzf project.tar.gz -C source
+      - name: Align Java and Kotlin JVM targets
+        working-directory: source
+        run: |
+          if [ -f app/build.gradle.kts ]; then
+            cat >> app/build.gradle.kts <<'EOF'
+
+android {
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+EOF
+          elif [ -f app/build.gradle ]; then
+            cat >> app/build.gradle <<'EOF'
+
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+EOF
+          else
+            echo 'Could not find app/build.gradle(.kts)' >&2
+            exit 1
+          fi
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
